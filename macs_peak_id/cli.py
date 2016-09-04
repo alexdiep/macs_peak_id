@@ -4,11 +4,11 @@ import os
 
 import pandas as pd
 
-def filter(file):
+def get_targets(file):
     with open(file, 'r') as target:
-         target_series = pd.read_table(target, delimiter='/n', squeeze=True, header=None)
+         targetseries = pd.read_table(target, delimiter='/n', squeeze=True, header=None)
          # Every fourth row of data is the revelant one
-         return target_series[::4]
+         return targetseries[::4]
 
 
 
@@ -17,15 +17,15 @@ def arguments():
 
     parser.add_argument('file', help='Test description')
 
-    parser.add_argument('filter', help='Test description')
+    parser.add_argument('target', help='Test description')
 
     return parser.parse_args()
 
 def main():
     args = arguments()
     
-    filterlist = filter(args.filter)
-
+    targetlist = get_target(args.target)
+    targetlst = [target[1:] for target in targetlist]
 
 if __name__ == "__main__":
     main()
