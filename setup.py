@@ -14,6 +14,17 @@ setup(
       entry_points={
             'console_scripts': ['macs_peak_id=macs_peak_id.cli:main']
       },
+      classifiers=[
+        'Development Status :: 3 - Alpha',
+
+        # Pick your license as you wish (should match "license" above)
+        'License :: OSI Approved :: MIT License',
+
+        'Programming Language :: Python :: 3',
+        'Programming Language :: Python :: 3.3',
+        'Programming Language :: Python :: 3.4',
+        'Programming Language :: Python :: 3.5',
+],
       include_package_data=True,
       zip_safe=False
 )
