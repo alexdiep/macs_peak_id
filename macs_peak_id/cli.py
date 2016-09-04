@@ -1,14 +1,13 @@
 from argparse import ArgumentParser
 
-import os
-
 import pandas as pd
 
-def get_targets(file):
-    with open(file, 'r') as target:
-         targetseries = pd.read_table(target, delimiter='/n', squeeze=True, header=None, engine='python')
-         # Every fourth row of data is the revelant one
-         return targetseries[::4]
+
+def get_targets(filetarget):
+    with open(filetarget, 'r') as target:
+        targetseries = pd.read_table(target, delimiter='/n', squeeze=True, header=None, engine='python')
+        # Every fourth row of data is the revelant one
+        return targetseries[::4]
 
 
 def arguments():
@@ -26,7 +25,7 @@ def arguments():
 
 def main():
     args = arguments()
-    
+
     targetlist = get_targets(args.target)
     # Chop off the first letter of targetlist
     targetlist = [target[1:] for target in targetlist]
