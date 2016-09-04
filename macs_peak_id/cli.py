@@ -1,13 +1,14 @@
 from argparse import ArgumentParser
 
-def main():
+def arguments():
     parser = ArgumentParser()
 
     parser.add_argument('file', help='Test description')
 
-    args = parser.parse_args()
+    return parser.parse_args()
 
-    print(args.file)
+def main():
+    print(arguments())
 
 if __name__ == "__main__":
     main()
