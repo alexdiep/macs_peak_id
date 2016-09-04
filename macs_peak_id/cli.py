@@ -11,7 +11,6 @@ def get_targets(file):
          return targetseries[::4]
 
 
-
 def arguments():
     parser = ArgumentParser()
 
@@ -21,11 +20,13 @@ def arguments():
 
     return parser.parse_args()
 
+
 def main():
     args = arguments()
     
-    targetlist = get_target(args.target)
+    targetlist = get_targets(args.target)
     targetlst = [target[1:] for target in targetlist]
+
 
 if __name__ == "__main__":
     main()
