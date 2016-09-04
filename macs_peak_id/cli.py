@@ -12,11 +12,14 @@ def get_targets(file):
 
 
 def arguments():
-    parser = ArgumentParser()
+    parser = ArgumentParser(description="""
+    Made for biolab. Takes first argument and uses second arugment to filter it.
+    Has data cleaning stuff for the specific data set it came with.
+    """)
 
-    parser.add_argument('file', help='Test description')
+    parser.add_argument('file', help='Main file to exact rows from. Tested with thrid column.')
 
-    parser.add_argument('target', help='Test description')
+    parser.add_argument('target', help='Filter keywords for exaction. All words has first letter chopped off.')
 
     return parser.parse_args()
 
@@ -25,13 +28,13 @@ def main():
     args = arguments()
     
     targetlist = get_targets(args.target)
+    # Chop off the first letter of targetlist
     targetlist = [target[1:] for target in targetlist]
     targetlist = pd.Series(targetlis)
 
     filedata = pd.read_csv(args.file, delimiter='\t', header=None)
 
-    matched = filedata[3][targetlist].index
-
+    # Returns rows that has targetlist in thrid column
     print(filedata[filedata[3].isin(targetlist)])
 
 
