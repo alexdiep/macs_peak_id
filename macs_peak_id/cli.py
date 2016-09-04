@@ -25,7 +25,7 @@ def main():
     args = arguments()
     
     targetlist = get_targets(args.target)
-    targetlst = [target[1:] for target in targetlist]
+    targetlist = [target[1:] for target in targetlist]
 
 
 if __name__ == "__main__":
