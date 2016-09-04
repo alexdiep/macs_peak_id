@@ -1,4 +1,4 @@
-MAC_PEAK_ID
+MACS_PEAK_ID
 ======
 Creates for biolab in UF. Takes two files: file, and target. File contains the rows and target contains the filter for these rows.
 Useage
