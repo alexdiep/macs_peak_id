@@ -11,6 +11,7 @@ $ pip uninstall macs_peak_id
 
 Usage
 ---
+Script is imcomplete. Usage below does not apply for the time being.
 ```sh
 $ macs_peak_id peaks.bed target1.fa target2.fa... 
 ```
