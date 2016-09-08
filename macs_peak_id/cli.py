@@ -36,7 +36,7 @@ def main():
         # Returns rows that has targetlist in thrid column
         filtered = filedata[filedata[3].isin(targetlist)]
         # Output as file_target.bed 
-        filtered.to_csv("{}_{}.bed".format(splitext(args.file)[0], splitext(target)[0]))
+        filtered.to_csv("{}_{}.bed".format(splitext(args.file)[0], splitext(target)[0]), sep="\t", index=None, header=None)
 
 
 if __name__ == "__main__":
