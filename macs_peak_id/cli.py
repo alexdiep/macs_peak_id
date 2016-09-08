@@ -29,7 +29,6 @@ def main():
     targetlist = get_targets(args.target)
     # Chop off the first letter of targetlist
     targetlist = [target[1:] for target in targetlist]
-    targetlist = pd.Series(targetlist)
 
     filedata = pd.read_csv(args.file, delimiter='\t', header=None)
 
