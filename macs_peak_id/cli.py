@@ -16,9 +16,9 @@ def arguments():
     Has data cleaning stuff for the specific data set it came with.
     """)
 
-    parser.add_argument('file', help='Main file to exact rows from. Tested with thrid column.')
+    parser.add_argument('file', help='Exact rows from.')
 
-    parser.add_argument('target', help='Filter keywords for exaction. All words has first letter chopped off.')
+    parser.add_argument('target', nargs='N' ,help='Filter keywords.')
 
     return parser.parse_args()
 
@@ -26,12 +26,12 @@ def arguments():
 def main():
     args = arguments()
 
+    filedata = pd.read_csv(args.file, delimiter='\t', header=None)
+
     targetlist = get_targets(args.target)
     # Chop off the first letter of targetlist
     targetlist = [target[1:] for target in targetlist]
-
-    filedata = pd.read_csv(args.file, delimiter='\t', header=None)
-
+    
     # Returns rows that has targetlist in thrid column
     print(filedata[filedata[3].isin(targetlist)])
 
