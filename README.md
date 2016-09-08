@@ -1,6 +1,7 @@
 MACS_PEAK_ID
 ===
 Created for genetics lab in UF.
+Takes in BED and FASTQ files to filter out BED files.
 
 Install
 ---
@@ -11,19 +12,17 @@ $ pip uninstall macs_peak_id
 
 Usage
 ---
-Script is incomplete. Usage below does not apply for the time being.
 ```sh
-$ macs_peak_id peaks.bed target1.fa target2.fa... 
+$ macs_peak_id input.bed target1.fa target2.fa... 
 ```
 ```
 $ ls .
-peaks_target1.bed peaks_target2.bed peaks_targetnoN1.bed peaks_targetnoN2.bed
+input_target1_non-repeats.bed
+input_target2_non-repeats.bed
+input_target1_repeats.bed
+input_target2_repeats.bed
 ```
-`peaks_target1.bed` contains rows matched with file `target1.fa`. `mac_peaks_id` also 
-produces a counterpart, `peaks_target1_noN.bed`, containing unmatched rows. Same naming 
+`input_target1_non-repeats.bed` contains rows matched with file `target1.fa`. `mac_peaks_id` also 
+produces a counterpart, `input_target1_repeats.bed`, containing unmatched rows. Same naming 
 scheme for `target2.fa`.
 
-Issues
----
-The script was created for the data in the folder. Tweaking is needed to apply for other 
-datasets. Also, might be really slow.
