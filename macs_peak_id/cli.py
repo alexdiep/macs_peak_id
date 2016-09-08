@@ -1,4 +1,5 @@
 from argparse import ArgumentParser
+from os.path import splitext
 
 import pandas as pd
 
@@ -18,7 +19,7 @@ def arguments():
 
     parser.add_argument('file', help='Exact rows from.')
 
-    parser.add_argument('target', nargs='N' ,help='Filter keywords.')
+    parser.add_argument('targets', nargs="+",help='Filter keywords.')
 
     return parser.parse_args()
 
@@ -28,12 +29,14 @@ def main():
 
     filedata = pd.read_csv(args.file, delimiter='\t', header=None)
 
-    targetlist = get_targets(args.target)
-    # Chop off the first letter of targetlist
-    targetlist = [target[1:] for target in targetlist]
-    
-    # Returns rows that has targetlist in thrid column
-    print(filedata[filedata[3].isin(targetlist)])
+    for target in args.targets:
+        targetlist = get_targets(target)
+        # Chop off the first letter of targetlist
+        targetlist = [target[1:] for target in targetlist]
+
+        # Returns rows that has targetlist in thrid column
+        filtered = filedata[filedata[3].isin(targetlist)]
+        filtered.to_csv("{}_{}.bed".format(splitext(args.file)[0], splitext(target)[0]))
 
 
 if __name__ == "__main__":
