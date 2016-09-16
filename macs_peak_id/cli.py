@@ -1,6 +1,10 @@
 from argparse import ArgumentParser
 import pathlib
 
+import pandas as pd
+
+import Bio
+
 def arguments():
     parser = ArgumentParser(description="""
     Takes in a folder of bed files and filters it with matching target.fa files.
@@ -16,9 +20,16 @@ def arguments():
 def main():
     args = arguments()
 
-    print([x for x in pathlib.Path(args.peaks).iterdir()])
+    peaks_path = pathlib.Path(args.peaks)
+    bed_files = list(peaks_path.glob("*.bed"))
 
-    print([x for x in pathlib.Path(args.targets).iterdir()])
+    bed_file = bed_files[0]
+
+    targets_path = pathlib.Path(args.targets)
+    targets_files = list(targets_path.glob("**/target.fa"))
+
+    targets_file = targets_files[0]
+
 
 if __name__ == "__main__":
     main()

@@ -90,3 +90,6 @@ ENV/
 
 # Setup.py installed files
 files.txt
+
+# develop
+data/
