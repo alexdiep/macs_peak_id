@@ -1,24 +1,14 @@
 from argparse import ArgumentParser
-from os.path import splitext
-
-import pandas as pd
-
-
-def get_targets(filetarget):
-    with open(filetarget, 'r') as target:
-        targetseries = pd.read_table(target, delimiter='/n', squeeze=True, header=None, engine='python')
-        # Every fourth row of data is the revelant one
-        return targetseries[::4]
-
+import pathlib
 
 def arguments():
     parser = ArgumentParser(description="""
-    Takes first argument and uses second argument to filter it.
+    Takes in a folder of bed files and filters it with matching target.fa files.
     """)
 
-    parser.add_argument('file', help='Exact rows from.')
+    parser.add_argument('peaks', help='Folder to exact .bed files.')
 
-    parser.add_argument('targets', nargs="+",help='Filter keywords.')
+    parser.add_argument('targets', help='Folder to exact target.fa files')
 
     return parser.parse_args()
 
@@ -26,19 +16,9 @@ def arguments():
 def main():
     args = arguments()
 
-    filedata = pd.read_csv(args.file, delimiter='\t', header=None)
+    print([x for x in pathlib.Path(args.peaks).iterdir()])
 
-    for target in args.targets:
-        targetlist = get_targets(target)
-        # Chop off the first letter of targetlist
-        targetlist = [target[1:] for target in targetlist]
-
-        # Returns rows that has targetlist in thrid column
-        filtered = filedata[filedata[3].isin(targetlist)]
-        # Output as file_target.bed 
-        output_name = "{}_{}.bed".format(splitext(args.file)[0], splitext(target)[0])
-        filtered.to_csv(output_name, sep="\t", index=None, header=None)
-
+    print([x for x in pathlib.Path(args.targets).iterdir()])
 
 if __name__ == "__main__":
     main()
