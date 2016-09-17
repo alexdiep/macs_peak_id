@@ -58,12 +58,11 @@ def main():
             with targets_dict[peaks_name].open() as targets_file:
                 targets_df = make_targets_df(targets_file)
 
-                peaks_filtered = pd.merge(peaks_filtered, targets_df, how='inner', on=['peak_id'])
+                peaks_filtered = pd.merge(peaks, targets_df, how='inner', on=['peak_id'])
 
                 with (output_folder / (peaks_name+'.rep.bed')).open('w') as o:
                     peaks_filtered.to_csv(o, sep="\t", index=None, header=None)
 
                 
-
 if __name__ == "__main__":
     main()
