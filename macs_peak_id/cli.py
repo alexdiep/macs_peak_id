@@ -65,12 +65,31 @@ def main():
 
             with targets_dict[peaks_name].open() as targets_file:
                 targets_df = make_targets_df(targets_file)
+                targets_df_25N = targets_df[targets_df['n_perc'] < 25]
+                targets_df_0N = targets_df[targets_df['n_perc'] == 0]
 
-                peaks_filtered = pd.merge(peaks, targets_df, how='inner', on=['peak_id'])
+                peaks_rep = pd.merge(peaks, targets_df, on=['peak_id'])
+
+                peaks_rep_25N = pd.merge(peaks, targets_df_25N, on=['peak_id'])
+                peaks_rep_0N = pd.merge(peaks, targets_df_0N, on=['peak_id'])                 
 
                 with (output_folder / (peaks_name+'.rep.bed')).open('w') as o:
-                    peaks_filtered.to_csv(o, sep="\t", index=None, header=None)
+                    peaks_rep.to_csv(o, sep="\t", index=None, header=None)
 
+                with (output_folder / (peaks_name+'.0Nrep.bed')).open('w') as o:
+                    peaks_rep_0N.to_csv(o, sep="\t", index=None, header=None)
+                with (output_folder / (peaks_name+'.25Nrep.bed')).open('w') as o:
+                    peaks_rep_25N.to_csv(o, sep="\t", index=None, header=None)
+                
+                peaks_nonrep_25N = peaks[~peaks['peak_id'].isin(targets_df_25N['peak_id'])]
+                peaks_nonrep_0N = peaks[~peaks['peak_id'].isin(targets_df_0N['peak_id'])]
+
+                with (output_folder / (peaks_name+'.0Nnonrep.bed')).open('w') as o:
+                    peaks_nonrep_0N.to_csv(o, sep="\t", index=None, header=None)
+                with (output_folder / (peaks_name+'.25Nnonrep.bed')).open('w') as o:
+                    peaks_nonrep_25N.to_csv(o, sep="\t", index=None, header=None)
+
+                
 
 if __name__ == "__main__":
     main()
