@@ -92,4 +92,4 @@ ENV/
 files.txt
 
 # develop
-data/
+data
