@@ -18,6 +18,7 @@ $ macs_peak_id peaks/ unmasked/
 ```
 `peaks/` folder should contain all of the bed files desired for analysing.
 `unmasked/` folder should be a HOMER output that contains target.fa.
+`--output` folder could be anything if you wanted to redirect the output.
 
 ```
 $ tree peaks/
@@ -47,9 +48,31 @@ dm6_unmasked
 
 ```
 
-Output would be a `results/` folder. To be programmed.
+Output would be a `results/` folder.
 ```
 $tree results/
 results
-...
+├── Kc167_P53_NT60A.0Nnonrep.bed
+├── Kc167_P53_NT60A.0Nrep.bed
+├── Kc167_P53_NT60A.25Nnonrep.bed
+├── Kc167_P53_NT60A.25Nrep.bed
+├── Kc167_P53_NT60A.rep.bed
+├── Kc167_P53_NT60B.0Nnonrep.bed
+├── Kc167_P53_NT60B.0Nrep.bed
+├── Kc167_P53_NT60B.25Nnonrep.bed
+├── Kc167_P53_NT60B.25Nrep.bed
+├── Kc167_P53_NT60B.rep.bed
+├── Kc167_P53_XR60A.0Nnonrep.bed
+├── Kc167_P53_XR60A.0Nrep.bed
+├── Kc167_P53_XR60A.25Nnonrep.bed
+├── Kc167_P53_XR60A.25Nrep.bed
+├── Kc167_P53_XR60A.rep.bed
+├── Kc167_P53_XR60B.0Nnonrep.bed
+├── Kc167_P53_XR60B.0Nrep.bed
+├── Kc167_P53_XR60B.25Nnonrep.bed
+├── Kc167_P53_XR60B.25Nrep.bed
+├── Kc167_P53_XR60B.rep.bed
+├── R_w1118_P53_NT60A.0Nnonrep.bed
+├── R_w1118_P53_NT60A.0Nrep.bed
+├── ...
 ```
