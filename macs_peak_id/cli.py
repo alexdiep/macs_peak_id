@@ -49,13 +49,17 @@ def main():
 
             with targets_dict[peaks_name].open() as targets_file:
                 targets = list(SeqIO.parse(targets_file, "fasta"))
-                
-                targets_ids = [t.id for t in targets]
-                targets_n_perc = pd.DataFrame({'peak_id':targets_ids,
-                                               'n_perc': [n_perc(t) for t in targets]})
 
-                peaks_filtered = peaks[peaks['peak_id'].isin(targets_ids)]
-                peaks_filtered = pd.merge(peaks, targets_n_perc, on=['peak_id'])
+                targets_id, targets_n_perc = [], []
+                for t in targets:
+                    targets_id.append(t.id)
+                    targets_n_perc.append(n_perc(t))
+
+                targets_df = pd.DataFrame({'peak_id': targets_id,
+                                               'n_perc': targets_n_perc})
+
+                peaks_filtered = peaks[peaks['peak_id'].isin(targets_df['peak_id'])]
+                peaks_filtered = pd.merge(peaks_filtered, targets_df, on=['peak_id'])
 
                 with (output_folder / (peaks_name+'.rep.bed')).open('w') as o:
                     peaks_filtered.to_csv(o, sep="\t", index=None, header=None)
