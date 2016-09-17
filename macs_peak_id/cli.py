@@ -14,6 +14,8 @@ def arguments():
 
     parser.add_argument('targets', help='Folder to exact target.fa files')
 
+    parser.add_argument('-o', '--output', default='results', help='Folder to output to')
+
     return parser.parse_args()
 
 def n_perc(record):
@@ -26,7 +28,11 @@ def n_perc(record):
 def main():
     args = arguments()
 
-    
+    output_folder = Path(args.output)
+    try:
+        output_folder.mkdir()
+    except OSError:
+        pass
 
     # Dict for target.fa
     # Index is gene Name 
@@ -45,6 +51,9 @@ def main():
                 
                 targets_ids = [t.id for t in targets]
                 peaks_filtered = peaks[peaks[3].isin(targets_ids)]
+
+                with (output_folder / (peaks_name+'.bed')).open('w') as o:
+                    peaks_filtered.to_csv(o, sep="\t", index=None, header=None)
 
                 targets_n_perc = pd.DataFrame({'id':targets_ids,
                                                'n_perc': [n_perc(t) for t in targets]})
