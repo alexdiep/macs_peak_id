@@ -25,6 +25,14 @@ def n_perc(record):
     n_count = record.seq.count('N')
     return 100 * n_count / len(record)
 
+def make_targets_df(targets_file):
+    targets_id, targets_n_perc = [], []
+    for t in SeqIO.parse(targets_file, "fasta"):
+        targets_id.append(t.id)
+        targets_n_perc.append(n_perc(t))
+
+    return pd.DataFrame({'peak_id': targets_id, 'n_perc': targets_n_perc})
+
 def main():
     args = arguments()
 
@@ -48,15 +56,7 @@ def main():
             peaks.rename(columns={peaks.columns[3]:'peak_id'}, inplace=True)
 
             with targets_dict[peaks_name].open() as targets_file:
-                targets = list(SeqIO.parse(targets_file, "fasta"))
-
-                targets_id, targets_n_perc = [], []
-                for t in targets:
-                    targets_id.append(t.id)
-                    targets_n_perc.append(n_perc(t))
-
-                targets_df = pd.DataFrame({'peak_id': targets_id,
-                                               'n_perc': targets_n_perc})
+                targets_df = make_targets_df(targets_file)
 
                 peaks_filtered = peaks[peaks['peak_id'].isin(targets_df['peak_id'])]
                 peaks_filtered = pd.merge(peaks_filtered, targets_df, on=['peak_id'])
