@@ -7,8 +7,8 @@ Analysis the output of [HOMER](http://homer.salk.edu/homer/).
 Install
 ---
 ```sh
-$ pip3 install git+https://github.com/alexdiep/macs_peak_id
-$ pip3 uninstall macs_peak_id
+$ sudo pip3 install git+https://github.com/alexdiep/macs_peak_id
+$ sudo pip3 uninstall macs_peak_id
 ```
 
 Usage
