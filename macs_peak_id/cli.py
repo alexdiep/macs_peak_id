@@ -47,6 +47,14 @@ def main():
     # f.parts[-2] is parent dir of target.fa. [:-2] gets rid of "*fa" chars at end
     targets_dict = {f.parts[-2][:-2]: f for f in Path(args.targets).glob("**/target.fa")}
 
+    try:
+        next(Path(args.peaks).glob('*.bed'))
+    except StopIteration:
+        raise OSError('Peaks folder contains no .bed files.')
+
+    if len(targets_dict) == 0:
+        raise OSError('Targets folder contains no target.fa files.')
+
     for peaks_path in Path(args.peaks).glob("*.bed"):
         # Get file name drop "_peaks"
         peaks_name = peaks_path.stem[:-6]
@@ -63,6 +71,6 @@ def main():
                 with (output_folder / (peaks_name+'.rep.bed')).open('w') as o:
                     peaks_filtered.to_csv(o, sep="\t", index=None, header=None)
 
-                
+
 if __name__ == "__main__":
     main()
