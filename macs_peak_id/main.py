@@ -65,14 +65,17 @@ def main():
 
             with targets_dict[peaks_name].open() as targets_file:
                 targets_df = make_targets_df(targets_file)
+                targets_df_70N = targets_df[targets_df['n_perc'] < 70]
                 targets_df_25N = targets_df[targets_df['n_perc'] < 25]
                 targets_df_0N = targets_df[targets_df['n_perc'] == 0]
                 
                 peaks_dict = {'rep': pd.merge(peaks, targets_df, on=['peak_id']),
                               'rep_25N': pd.merge(peaks, targets_df_25N, on=['peak_id']),
                               'rep_0N': pd.merge(peaks, targets_df_0N, on=['peak_id']),
+                              'rep_70N': pd.merge(peaks, targets_df_70N, on=['peak_id']),
+                              'nonrep_0N': peaks[~peaks['peak_id'].isin(targets_df_0N['peak_id'])],
                               'nonrep_25N': peaks[~peaks['peak_id'].isin(targets_df_25N['peak_id'])],
-                              'nonrep_0N': peaks[~peaks['peak_id'].isin(targets_df_0N['peak_id'])]}
+                              'nonrep_70N': peaks[~peaks['peak_id'].isin(targets_df_70N['peak_id'])]}
                 
                 for peaks_key, peaks_value in peaks_dict.items():
                     if not peaks_value.empty:
