@@ -84,6 +84,7 @@ def main():
 
                 for peaks_key, peaks_value in peaks_dict.items():
                     if not peaks_value.empty:
+                        # Output format is "gene_name.(non)rep_(0,25,75)N.bed"
                         with (output_folder/ '{}.{}.bed'.format(peaks_name, peaks_key)).open('w') as o:
                             peaks_value.to_csv(o, sep="\t", index=None, header=None)
 
