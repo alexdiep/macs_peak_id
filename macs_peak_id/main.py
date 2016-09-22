@@ -26,6 +26,11 @@ def n_perc(record):
     return 100 * n_count / len(record)
 
 def make_targets_df(targets_file):
+    """
+    Takes a Path() to a target.fa file and processes it into a Dataframe.
+    Also calculates the percent of N in the sequence and appends to table.
+    Returns a Dataframe()
+    """
     targets_id, targets_n_perc = [], []
     for t in SeqIO.parse(targets_file, "fasta"):
         targets_id.append(t.id)
