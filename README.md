@@ -7,9 +7,23 @@ Analysis the output of [HOMER](http://homer.salk.edu/homer/).
 Install
 ---
 ```sh
-$ sudo pip3 install git+https://github.com/alexdiep/macs_peak_id
+$ sudo pip3 install git+https://github.com/zhoulab/macs_peak_id
 $ sudo pip3 uninstall macs_peak_id
 ```
+If you are running the code on HPC or other environments where 
+you don't have sudo permissions then you need to install it locally.
+```sh
+# HPC specific code
+$ module load python3
+$ module load git
+# Install script to ~/.local/bin
+$ pip3 install --user git+https://github.com/zhoulab/macs_peak_id
+# Add ~/.local/bin to path
+$ export PATH=$PATH:~/.local/bin
+```
+If you don't want to write `export PATH=$PATH:~/.local/bin` every 
+time you open the terminal then add `~/.local/bin` to your PATH 
+in .bash_profile with `PATH=$PATH:~/.local/bin`.
 
 Usage
 ---
