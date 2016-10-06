@@ -38,29 +38,44 @@ def make_targets_df(targets_file):
 
     return pd.DataFrame({'peak_id': targets_id, 'n_perc': targets_n_perc})
 
+def get_targets_path(peaks_path, targets_path):
+    """
+    Returns a dict of target paths with peak name as the key.
+    """
+    peak_names = [p.stem[:-6] for p in peaks_path]
+    targets_dict = {}
+    for t_path in targets_path:
+        for peak_name in peak_names:
+            # Check if peak_name is a substring of parent folder of target.fa
+            if peak_name in t_path.parts[-2]:
+                targets_dict[peak_name] = t_path
+                peak_names.remove(peak_name)
+
+    return targets_dict
+
 def main():
     args = arguments()
-
     output_folder = Path(args.output)
     try:
         output_folder.mkdir()
     except OSError:
         pass
 
-    # Dict for target.fa
-    # Index is gene Name 
-    # f.parts[-2] is parent dir of target.fa. [:-2] gets rid of "*fa" chars at end
-    targets_dict = {f.parts[-2][:-2]: f for f in Path(args.targets).glob("**/target.fa")}
-
     try:
         next(Path(args.peaks).glob('*.bed'))
     except StopIteration:
         raise OSError('Peaks folder contains no .bed files.')
 
-    if len(targets_dict) == 0:
+    try:
+        next(Path(args.targets).glob("**/target.fa"))
+    except StopIteration:
         raise OSError('Targets folder contains no target.fa files.')
+    
+    targets_dict = get_targets_path(Path(args.peaks).glob('*.bed'),
+                                    Path(args.targets).glob("**/target.fa"))
+    
 
-    for peaks_path in Path(args.peaks).glob("*.bed"):
+    for peaks_path in Path(args.peaks).glob('*.bed'):
         # Get file name drop "_peaks"
         peaks_name = peaks_path.stem[:-6]
 
