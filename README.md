@@ -31,7 +31,8 @@ Usage
 $ macs_peak_id peaks/ unmasked/
 ```
 `peaks/` folder should contain all of the bed files desired for analysing.
-`unmasked/` folder should be a HOMER output that contains target.fa.
+`unmasked/` folder should be a HOMER output that contains target.fa, the 
+peak name should be in the parent folder.
 `--output` folder could be anything if you wanted to redirect the output.
 
 ```
