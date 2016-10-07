@@ -4,17 +4,21 @@ setup(
       name='macs_peak_id',
       version='0.1',
       description='Mac_peak_id analyzes *.bed and target.fa files from HOMER.',
-      long_description='README.md',
       url='http://github.com/alexdiep/macs_peak_id',
+
       author='Alex Diep',
       author_email='alexdiep2501@gmail.com',
+      
       license='MIT',
+      
       packages=find_packages(),
       install_requires=['pandas', 'biopython'],
+      
       entry_points={
             'console_scripts': 
-                  ['macs_peak_id = macs_peak_id.main:main']
+                  ['macs_peak_id = macs_peak_id.macs_peak_id:main']
       },
+      
       classifiers=[
         'Development Status :: 3 - Alpha',
         'Environment :: Console',
@@ -23,7 +27,7 @@ setup(
         'Programming Language :: Python',
         'Programming Language :: Python :: 3.4',
         'Programming Language :: Python :: 3.5',
-],
-      include_package_data=True,
-      zip_safe=False
+      ],
+
+       zip_safe=False,
 )
