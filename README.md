@@ -30,7 +30,7 @@ Usage
 ```sh
 $ macs_peak_id peaks/ unmasked/
 ```
-`peaks/` folder should contain all of the bed files desired for analysing.
+`peaks/` folder should contain all of the bed files desired for analyzing.
 `unmasked/` folder should be a HOMER output that contains target.fa, the 
 peak name should be in the parent folder.
 `--output` folder could be anything if you wanted to redirect the output.
@@ -90,4 +90,41 @@ results
 ├── R_w1118_P53_NT60A.0Nnonrep.bed
 ├── R_w1118_P53_NT60A.0Nrep.bed
 ├── ...
+```
+
+Analysis
+---
+From line 87 to line 98, the analysis is done from there.
+
+Splits the target.fa files into three dataframes by the percentile of N in 
+sequences.
+```python
+targets_df_70N = targets_df[targets_df['n_perc'] < 70]
+targets_df_25N = targets_df[targets_df['n_perc'] < 25]
+targets_df_0N = targets_df[targets_df['n_perc'] == 0]
+```
+
+Filter the peaks with targets, so only the rows with peak id's in both 
+peak and targets remain.
+```python
+peaks_dict = {'nonrep': pd.merge(peaks, targets_df, on=['peak_id']),
+              'nonrep_25N': pd.merge(peaks, targets_df_25N, on=['peak_id']),
+              'nonrep_0N': pd.merge(peaks, targets_df_0N, on=['peak_id']),
+              'nonrep_70N': pd.merge(peaks, targets_df_70N, on=['peak_id']),
+              ...
+```
+
+Then filter peaks so only rows that aren't in the target files remains.
+```python
+              ...
+              'rep_0N': peaks[~peaks['peak_id'].isin(targets_df_0N['peak_id'])],
+              'rep_25N': peaks[~peaks['peak_id'].isin(targets_df_25N['peak_id'])],
+              'rep_70N': peaks[~peaks['peak_id'].isin(targets_df_70N['peak_id'])]}
+```
+
+Output is formated as the gene name and then the label of the analysis.
+```python
+# Output format is "gene_name.(non)rep_(0,25,75)N.bed"
+with (output_folder/ '{}.{}.bed'.format(peaks_name, peaks_key)).open('w') as o:
+            peaks_value.to_csv(o, sep="\t", index=None, header=None)
 ```
