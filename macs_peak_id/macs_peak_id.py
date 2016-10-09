@@ -55,52 +55,65 @@ def get_targets_path(peaks_path, targets_path):
 
 def main():
     args = arguments()
+    
     output_folder = Path(args.output)
+    # Check if output folder exists already and buries expection if it does
     try:
         output_folder.mkdir()
-    except OSError:
+    except FileExistsError:
         pass
 
+    # Check if peaks folder contains bed files
     try:
         next(Path(args.peaks).glob('*.bed'))
     except StopIteration:
-        raise OSError('Peaks folder contains no .bed files.')
+        raise FileNotFoundError('Peaks folder contains no .bed files.')
 
+    # Check if target folder contains target.fa in subdirs
     try:
         next(Path(args.targets).glob("**/target.fa"))
     except StopIteration:
-        raise OSError('Targets folder contains no target.fa files.')
+        raise FileNotFoundError('Targets folder contains no target.fa files.')
     
     targets_dict = get_targets_path(Path(args.peaks).glob('*.bed'),
                                     Path(args.targets).glob("**/target.fa"))
     
 
     for peaks_path in Path(args.peaks).glob('*.bed'):
-        # Get file name drop "_peaks"
+        # Get file name and drop "_peaks"
         peaks_name = peaks_path.stem[:-6]
 
         with peaks_path.open() as peaks_file:
             peaks = pd.read_table(peaks_file, header=None)
+            # Label the third column of the bed file as peak_id
+            # Make it easier to filter and combine files
             peaks.rename(columns={peaks.columns[3]:'peak_id'}, inplace=True)
 
             with targets_dict[peaks_name].open() as targets_file:
+                # Contains the target file that is associated with the gene
                 targets_df = make_targets_df(targets_file)
+                # Creates three new target dataframes based on the percent of N
                 targets_df_70N = targets_df[targets_df['n_perc'] < 70]
                 targets_df_25N = targets_df[targets_df['n_perc'] < 25]
                 targets_df_0N = targets_df[targets_df['n_perc'] == 0]
 
+                              # Find the lines of peak names that exist in both bed and target files
                 peaks_dict = {'nonrep': pd.merge(peaks, targets_df, on=['peak_id']),
+                              # Continue to match peak ids but with the percent of N
                               'nonrep_25N': pd.merge(peaks, targets_df_25N, on=['peak_id']),
                               'nonrep_0N': pd.merge(peaks, targets_df_0N, on=['peak_id']),
                               'nonrep_70N': pd.merge(peaks, targets_df_70N, on=['peak_id']),
+                              # Find the lines that wasn't found in target files based from the percent of N
                               'rep_0N': peaks[~peaks['peak_id'].isin(targets_df_0N['peak_id'])],
                               'rep_25N': peaks[~peaks['peak_id'].isin(targets_df_25N['peak_id'])],
                               'rep_70N': peaks[~peaks['peak_id'].isin(targets_df_70N['peak_id'])]}
 
                 for peaks_key, peaks_value in peaks_dict.items():
+                    # Doesn't write empty files to output
                     if not peaks_value.empty:
                         # Output format is "gene_name.(non)rep_(0,25,75)N.bed"
-                        with (output_folder/ '{}.{}.bed'.format(peaks_name, peaks_key)).open('w') as o:
+                        # The label for the analysis is from the peaks_dict
+                        with (output_folder / '{}.{}.bed'.format(peaks_name, peaks_key)).open('w') as o:
                             peaks_value.to_csv(o, sep="\t", index=None, header=None)
 
 
